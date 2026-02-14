@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Box, Text, Button, Input, FormControl, Select } from 'native-base';
+import { Box, Text, Button, Input, FormControl, Select, ScrollView, KeyboardAvoidingView } from 'native-base';
+import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraView } from '../../components/CameraView';
@@ -113,7 +114,11 @@ export default function AddAssetScreen() {
   }
 
   return (
-    <Box flex={1} bg={Colors.background} safeAreaTop>
+    <KeyboardAvoidingView
+      flex={1}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <Box flex={1} bg={Colors.background} safeAreaTop>
       {/* 顶部标题 */}
       <Box
         flexDirection="row"
@@ -154,13 +159,24 @@ export default function AddAssetScreen() {
         </Button>
       </Box>
 
-      <Box flex={1} px="4" pt="4">
+      <ScrollView
+        flex={1}
+        px="4"
+        pt="4"
+        pb="8"
+        keyboardShouldPersistTaps="handled"
+        nestedScrollEnabled={false}
+      >
         <FormControl mb="3">
           <FormControl.Label>资产名称</FormControl.Label>
           <Input
             value={form.name}
             onChangeText={(t) => setForm((prev) => ({ ...prev, name: t }))}
             placeholder="如：建设银行储蓄卡"
+            autoCapitalize="none"
+            returnKeyType="next"
+            isDisabled={false}
+            isReadOnly={false}
           />
         </FormControl>
         <FormControl mb="3">
@@ -181,6 +197,10 @@ export default function AddAssetScreen() {
             value={form.account}
             onChangeText={(t) => setForm((prev) => ({ ...prev, account: t }))}
             placeholder="账号/卡号（拍照可自动识别）"
+            autoCapitalize="none"
+            returnKeyType="next"
+            isDisabled={false}
+            isReadOnly={false}
           />
         </FormControl>
         <FormControl mb="3">
@@ -190,6 +210,10 @@ export default function AddAssetScreen() {
             onChangeText={(t) => setForm((prev) => ({ ...prev, password: t }))}
             placeholder="选填"
             type="password"
+            autoCapitalize="none"
+            returnKeyType="next"
+            isDisabled={false}
+            isReadOnly={false}
           />
         </FormControl>
         <FormControl mb="3">
@@ -198,6 +222,10 @@ export default function AddAssetScreen() {
             value={form.note}
             onChangeText={(t) => setForm((prev) => ({ ...prev, note: t }))}
             placeholder="选填"
+            autoCapitalize="sentences"
+            returnKeyType="done"
+            isDisabled={false}
+            isReadOnly={false}
           />
         </FormControl>
         <FormControl mb="3">
@@ -212,12 +240,14 @@ export default function AddAssetScreen() {
           colorScheme="blue"
           size="lg"
           mt="4"
+          mb="8"
           isLoading={saving}
           isDisabled={!form.name.trim()}
         >
           保存
         </Button>
-      </Box>
+      </ScrollView>
     </Box>
+    </KeyboardAvoidingView>
   );
 }

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Box, Text, Button } from 'native-base';
+import { Box, Text, Button, ScrollView } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
 import { HeartbeatStatus } from '../../components/HeartbeatStatus';
@@ -33,7 +33,7 @@ export default function ProfileScreen() {
         <Box w="16" />
       </Box>
 
-      <Box px="4" py="4">
+      <ScrollView px="4" py="4">
         {/* 头像占位 */}
         <Box alignItems="center" py="6" mb="4" bg={Colors.surface} borderRadius="lg">
           <Box
@@ -83,10 +83,10 @@ export default function ProfileScreen() {
           </Text>
         </Box>
 
-        <Button w="full" variant="ghost" colorScheme="red" onPress={logout}>
+        <Button w="full" variant="ghost" colorScheme="red" onPress={logout} mb="8">
           退出登录
         </Button>
-      </Box>
+      </ScrollView>
     </Box>
   );
 }
