@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Box, Text, Spinner } from 'native-base';
 import { useAuth } from '../hooks/useAuth';
@@ -9,14 +9,25 @@ import { useAuth } from '../hooks/useAuth';
 export default function IndexScreen() {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/(main)');
-    } else {
-      router.replace('/(auth)/login');
-    }
-  }, [isAuthenticated, router]);
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const timeout = setTimeout(() => {
+      if (isAuthenticated) {
+        router.replace('/(main)');
+      } else {
+        router.replace('/(auth)/login');
+      }
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [isAuthenticated, router, isMounted]);
 
   return (
     <Box flex={1} justifyContent="center" alignItems="center" bg="gray.50">
